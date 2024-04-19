@@ -18,8 +18,8 @@ public class MusicPlayer {
     //constructor - how we build the music player
     public MusicPlayer(){
         //Song Options
-        String [] songList = {"Dumbbells.wav", "Hey Papi.wav", "Code Kings", "Fire in My Belly", "For Loop", "GORG", "GUI Mastermind", "Hashin_ in the Code",
-        "GUI Mastermind", "Mr. Scott", "Programming", "The Boolean Blues", "The Codebreaker_s Fury"};
+        String [] songList = {"Dumbbells.wav", "Hey Papi.wav", "Code Kings.wav", "Fire in My Belly.wav", "For Loop.wav", "GORG.wav", "GUI Mastermind.wav", "Hashin_ in the Code.wav",
+        "GUI Mastermind.wav", "Mr. Scott.wav", "Programming.wav", "The Boolean Blues.wav", "The Codebreaker_s Fury.wav"};
 
         //Frame
         JFrame frame = new JFrame("Music Player");
@@ -34,8 +34,12 @@ public class MusicPlayer {
         JPanel buttonPanel = new JPanel();
         JButton playButton = new JButton("Play");
         JButton pauseButton = new JButton("Pause");
+        JButton rewindButton = new JButton("-15s");
+        JButton forwardButton = new JButton("+15s");
+        buttonPanel.add(rewindButton);
         buttonPanel.add(playButton);
         buttonPanel.add(pauseButton);
+        buttonPanel.add(forwardButton);
 
         //Labels
         JPanel labelPanel = new JPanel();
