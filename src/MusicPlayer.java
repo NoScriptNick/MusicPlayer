@@ -14,12 +14,14 @@ public class MusicPlayer {
     private JLabel totalTime;
     //private variable time, used long data type because that's what it saves as
     private long time = 0;
+    private String currentSong;
+    private String playingSong;
 
     //constructor - how we build the music player
     public MusicPlayer(){
         //Song Options
         String [] songList = {"Dumbbells.wav", "Hey Papi.wav", "Code Kings.wav", "Fire in My Belly.wav", "For Loop.wav", "GORG.wav", "GUI Mastermind.wav", "Hashin_ in the Code.wav",
-        "GUI Mastermind.wav", "Mr. Scott.wav", "Programming.wav", "The Boolean Blues.wav", "The Codebreaker_s Fury.wav"};
+                "GUI Mastermind.wav", "Mr. Scott.wav", "Programming.wav", "The Boolean Blues.wav", "The Codebreaker_s Fury.wav"};
 
         //Frame
         JFrame frame = new JFrame("Music Player");
@@ -52,14 +54,39 @@ public class MusicPlayer {
         JPanel dropDown = new JPanel();
         JComboBox<String> songSelector = new JComboBox<>(songList);
         dropDown.add(songSelector);
+        currentSong = songSelector.getSelectedItem().toString();
 
         //Button Function
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event){
                 //tells program what song to play
-                playMusic(songSelector.getSelectedItem().toString());
-                startTimer();
-                updateLabels();
+                if (clip == null) {
+                    playMusic(songSelector.getSelectedItem().toString());
+                    startTimer();
+                    updateLabels();
+                    playingSong = songSelector.getSelectedItem().toString();
+                } else if (!clip.isRunning()) {
+                    playMusic(songSelector.getSelectedItem().toString());
+                    startTimer();
+                    updateLabels();
+                    playingSong = songSelector.getSelectedItem().toString();
+                }
+            }
+        });
+
+        forwardButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event){
+                //moves the song forward by 15s
+                forward(songSelector.getSelectedItem().toString());
+                time = clip.getMicrosecondPosition();
+            }
+        });
+
+        rewindButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event){
+                //moves the song backward by 15s
+                rewind(songSelector.getSelectedItem().toString());
+                time = clip.getMicrosecondPosition();
             }
         });
 
@@ -80,13 +107,32 @@ public class MusicPlayer {
         frame.setVisible(true);
     }
 
+    public void forward(String selectedSong){
+        if (clip.getMicrosecondPosition() + 15000000 > clip.getMicrosecondLength()) {
+            clip.setMicrosecondPosition(clip.getMicrosecondLength());
+            updateLabels();
+        } else {
+            clip.setMicrosecondPosition(time + 15000000);
+        }
+    }
+
+    public void rewind(String selectedSong){
+        clip.setMicrosecondPosition(time - 15000000);
+        if (clip.getMicrosecondPosition() - 15000000 < 0) {
+            clip.setMicrosecondPosition(0);
+            updateLabels();
+        } else {
+            clip.setMicrosecondPosition(time - 15000000);
+        }
+    }
+
     public void playMusic(String selectedSong){
         try {
             File file = new File(System.getProperty("user.dir") + "\\src\\audio\\" + selectedSong);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            //sets the time of the song so it can play where it was previously paused
+            //sets the time of the song, so it can play where it was previously paused
             clip.setMicrosecondPosition(time);
             clip.start();
         }
