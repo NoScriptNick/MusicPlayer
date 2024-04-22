@@ -14,7 +14,6 @@ public class MusicPlayer {
     private JLabel totalTime;
     //private variable time, used long data type because that's what it saves as
     private long time = 0;
-    private String currentSong;
     private String playingSong;
 
     //constructor - how we build the music player
@@ -54,7 +53,6 @@ public class MusicPlayer {
         JPanel dropDown = new JPanel();
         JComboBox<String> songSelector = new JComboBox<>(songList);
         dropDown.add(songSelector);
-        currentSong = songSelector.getSelectedItem().toString();
 
         //Button Function
         playButton.addActionListener(new ActionListener() {
@@ -66,10 +64,26 @@ public class MusicPlayer {
                     updateLabels();
                     playingSong = songSelector.getSelectedItem().toString();
                 } else if (!clip.isRunning()) {
-                    playMusic(songSelector.getSelectedItem().toString());
-                    startTimer();
-                    updateLabels();
-                    playingSong = songSelector.getSelectedItem().toString();
+                    if (songSelector.getSelectedItem().toString().equals(playingSong)) {
+                        if (clip.getMicrosecondPosition() == clip.getMicrosecondLength()) {
+                            playMusic(songSelector.getSelectedItem().toString());
+                            clip.setMicrosecondPosition(0);
+                            startTimer();
+                            updateLabels();
+                            playingSong = songSelector.getSelectedItem().toString();
+                        } else {
+                            playMusic(songSelector.getSelectedItem().toString());
+                            startTimer();
+                            updateLabels();
+                            playingSong = songSelector.getSelectedItem().toString();
+                        }
+                    } else {
+                        playMusic(songSelector.getSelectedItem().toString());
+                        clip.setMicrosecondPosition(0);
+                        startTimer();
+                        updateLabels();
+                        playingSong = songSelector.getSelectedItem().toString();
+                    }
                 }
             }
         });
