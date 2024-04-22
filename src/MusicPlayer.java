@@ -84,6 +84,13 @@ public class MusicPlayer {
                         updateLabels();
                         playingSong = songSelector.getSelectedItem().toString();
                     }
+                } else {
+                    clip.stop();
+                    playMusic(songSelector.getSelectedItem().toString());
+                    clip.setMicrosecondPosition(0);
+                    startTimer();
+                    updateLabels();
+                    playingSong = songSelector.getSelectedItem().toString();
                 }
             }
         });
