@@ -1,3 +1,4 @@
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
@@ -182,6 +183,7 @@ public class MusicPlayer {
             if (clip.isRunning()) {
                 currentTime.setText("Current Time: " + clip.getMicrosecondPosition()/1000000 + "s");
                 totalTime.setText("Total Time: " + clip.getMicrosecondLength()/1000000 + "s");
+                time = clip.getMicrosecondPosition();
             }
         }
     }
